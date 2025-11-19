@@ -37,7 +37,7 @@ export default function LandingPage({ onModuleSelect }: LandingPageProps) {
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">
             <img 
-              src="CAPS_logo.png"   // <--- replace with actual image path
+              src="images\CAPS_logo.png"   // <--- replace with actual image path
               alt="CAPS LOGO"
               className="w-80 h-20 object-cover rounded-3xl"
             />
