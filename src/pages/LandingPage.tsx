@@ -35,8 +35,12 @@ export default function LandingPage({ onModuleSelect }: LandingPageProps) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-16">
-          <div className="flex justify-left mb-6">
-            <div className="w-60 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl shadow-xl" />
+          <div className="flex justify-center mb-6">
+            <img 
+              src="CAPS_logo.png"   // <--- replace with actual image path
+              alt="CAPS LOGO"
+              className="w-80 h-20 object-cover rounded-3xl"
+            />
           </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Path Finder 
