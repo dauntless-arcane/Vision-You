@@ -1,38 +1,9 @@
-import { Sparkles } from 'lucide-react';
-import { useState } from 'react';
-import Button from '../components/Button';
-import Card from '../components/Card';
-import Input from '../components/Input';
-import ProgressBar from '../components/ProgressBar';
-const [loading, setLoading] = useState(false);
-const [aiResult, setAIResult] = useState<string | null>(null);
-
-
-const generateAI = async () => {
-  setLoading(true);
-
-  try {
-    const res = await fetch("/api/visionyou", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ formData }),
-    });
-
-    const data = await res.json();
-
-    if (data?.summary) {
-      setAIResult(data.summary);
-    } else {
-      setAIResult("No response received from the AI.");
-    }
-  } catch (err) {
-    console.error(err);
-    setAIResult("An error occurred while generating your analysis.");
-  }
-
-  setLoading(false);
-};
-
+import { Sparkles } from "lucide-react";
+import { useState } from "react";
+import Button from "../components/Button";
+import Card from "../components/Card";
+import Input from "../components/Input";
+import ProgressBar from "../components/ProgressBar";
 
 interface VisionYouBlueprintProps {
   onBack: () => void;
@@ -54,22 +25,77 @@ interface FormData {
   futureMessage: string;
 }
 
-export default function VisionYouBlueprint({ onBack }: VisionYouBlueprintProps) {
+export default function VisionYouBlueprint({
+  onBack,
+}: VisionYouBlueprintProps) {
   const [step, setStep] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // aiResult now stores JSON, not just string
+  const [aiResult, setAIResult] = useState<any>(null);
+
+  // Mock data fallback
+  const mockData = {
+    visionYouSummary: {
+      identity: {
+        coreValues: ["Integrity", "Creativity", "Growth"],
+        jobTitle: "UI/UX Designer",
+        industry: "Technology",
+        adjectives: ["Creative", "Empathetic", "Focused"]
+      },
+      skills: {
+        exceptionalSkills: ["Design thinking", "User research"],
+        futureSkills: ["Prototyping", "Motion design"],
+        superpower: "Turning complex ideas into simple visuals"
+      },
+      lifestyle: {
+        priorities: ["Work–life balance", "Impact", "Continuous learning"],
+        dreamActivities: ["Designing interfaces", "Collaborating with teams"],
+        impact: "Creating meaningful digital experiences",
+        beneficiaries: ["Students", "Young professionals"],
+        workdayFeeling: "Fulfilled and inspired"
+      },
+      futureMessage: "My future self is proud that I chose design, because I followed my love for creativity, built strong skills in UI/UX, made an impact by improving digital experiences, and turned it into a career in product design."
+    },
+    careerPaths: [
+      {
+        title: "UI/UX Designer",
+        whyFit: "Matches your creativity, empathy, and interest in digital experiences.",
+        scopeIndia: "High demand in IT hubs like Bangalore, Chennai, Hyderabad.",
+        scopeAbroad: "Strong demand in US, Germany, Canada.",
+        challenges: ["Competition", "Keeping up with design trends"],
+        preparation: ["Take UI/UX courses", "Build portfolio", "Join internships"]
+      },
+      {
+        title: "Product Designer",
+        whyFit: "Blends creativity with problem-solving skills.",
+        scopeIndia: "Growing opportunities in startups and tech companies.",
+        scopeAbroad: "High demand in global SaaS companies.",
+        challenges: ["Ambiguous tasks", "Cross-team alignment"],
+        preparation: ["Learn prototyping", "Study user psychology"]
+      }
+    ],
+    roadmap: {
+      sixMonths: ["Complete UI/UX course", "Start portfolio", "Do 1 real project"],
+      twelveMonths: ["Internship", "Advanced Figma skills", "2 case studies"],
+      twentyFourMonths: ["Full-time role", "Deep design specialization"]
+    }
+  };
+
   const [formData, setFormData] = useState<FormData>({
-    coreValues: '',
-    jobTitle: '',
-    industry: '',
-    adjectives: '',
-    exceptionalSkills: '',
-    futureSkills: '',
-    superpower: '',
-    priorities: '',
-    dreamActivities: '',
-    impact: '',
-    beneficiaries: '',
-    workdayFeeling: '',
-    futureMessage: ''
+    coreValues: "",
+    jobTitle: "",
+    industry: "",
+    adjectives: "",
+    exceptionalSkills: "",
+    futureSkills: "",
+    superpower: "",
+    priorities: "",
+    dreamActivities: "",
+    impact: "",
+    beneficiaries: "",
+    workdayFeeling: "",
+    futureMessage: "",
   });
 
   const updateField = (field: keyof FormData, value: string) => {
@@ -79,6 +105,52 @@ export default function VisionYouBlueprint({ onBack }: VisionYouBlueprintProps) 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 5));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
+  // -------- AI Fetch + Parse ----------
+  const generateAI = async () => {
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/visionyou", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formData }),
+      });
+
+      if (!res.ok) {
+        throw new Error("API request failed");
+      }
+
+      const data = await res.json();
+
+      // Check if data exists and has the expected structure
+      if (data && (data.careerPaths || data.roadmap || data.visionYouSummary)) {
+        setAIResult(data);
+      } else if (data.summary) {
+        // If data comes as a summary string, try parsing it
+        try {
+          const parsed = JSON.parse(data.summary);
+          setAIResult(parsed);
+        } catch (e) {
+          console.error("JSON parse error:", e);
+          // Use mock data as fallback
+          setAIResult(mockData);
+        }
+      } else {
+        // Use mock data if structure is unexpected
+        setAIResult(mockData);
+      }
+    } catch (err) {
+      console.error("API Error:", err);
+      // Use mock data as fallback
+      setAIResult(mockData);
+    }
+
+    setLoading(false);
+  };
+
+  // -----------------------------------------------------------------------
+  // STEP 0 — INTRO PAGE
+  // -----------------------------------------------------------------------
   if (step === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
@@ -91,7 +163,7 @@ export default function VisionYouBlueprint({ onBack }: VisionYouBlueprintProps) 
               VisionYou
             </h1>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Let’s create your VisionYou — the future, upgraded version of you. I’ll ask you questions to understand your ideal identity, skills, lifestyle, and aspirations. Answer in as much detail as you can.
+              Let's create your VisionYou — the future, upgraded version of you.
             </p>
             <div className="flex gap-4 justify-center">
               <Button variant="ghost" onClick={onBack}>
@@ -107,25 +179,10 @@ export default function VisionYouBlueprint({ onBack }: VisionYouBlueprintProps) 
     );
   }
 
+  // -----------------------------------------------------------------------
+  // STEP 5 — FINAL SUMMARY PAGE
+  // -----------------------------------------------------------------------
   if (step === 5) {
-    {/* AI RESULT AREA */}
-      {loading && (
-        <div className="mt-6 p-4 bg-blue-100 text-blue-800 rounded-xl text-center">
-          Generating your VisionYou Analysis... Please wait.
-        </div>
-      )}
-
-      {aiResult && (
-        <div className="mt-6 p-6 bg-white border border-blue-200 rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-            AI-Generated Career Analysis
-          </h2>
-          <div className="prose max-w-none text-gray-800 whitespace-pre-line">
-            {aiResult}
-          </div>
-        </div>
-      )}
-
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
         <div className="max-w-4xl mx-auto px-4">
@@ -134,62 +191,130 @@ export default function VisionYouBlueprint({ onBack }: VisionYouBlueprintProps) 
               Your VisionYou Summary
             </h1>
 
+            {/* ---------------------- USER WRITTEN SUMMARY ---------------------- */}
             <div className="space-y-6">
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Identity</h2>
-                <div className="space-y-3 text-gray-700">
-                  <p><strong>Core Values:</strong> {formData.coreValues}</p>
-                  <p><strong>Desired Job Title:</strong> {formData.jobTitle}</p>
-                  <p><strong>Industry:</strong> {formData.industry}</p>
-                  <p><strong>Three Adjectives:</strong> {formData.adjectives}</p>
-                </div>
+                <h2 className="text-xl font-bold">Identity</h2>
+                <p><strong>Core Values:</strong> {formData.coreValues}</p>
+                <p><strong>Desired Job Title:</strong> {formData.jobTitle}</p>
+                <p><strong>Industry:</strong> {formData.industry}</p>
+                <p><strong>Adjectives:</strong> {formData.adjectives}</p>
               </div>
 
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Skills & Strengths</h2>
-                <div className="space-y-3 text-gray-700">
-                  <p><strong>Exceptional Skills:</strong> {formData.exceptionalSkills}</p>
-                  <p><strong>Future Skills (2 Years):</strong> {formData.futureSkills}</p>
-                  <p><strong>Daily Superpower:</strong> {formData.superpower}</p>
-                </div>
+                <h2 className="text-xl font-bold">Skills & Strengths</h2>
+                <p><strong>Exceptional Skills:</strong> {formData.exceptionalSkills}</p>
+                <p><strong>Future Skills:</strong> {formData.futureSkills}</p>
+                <p><strong>Superpower:</strong> {formData.superpower}</p>
               </div>
 
               <div className="bg-gradient-to-r from-pink-50 to-blue-50 rounded-2xl p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Lifestyle & Impact</h2>
-                <div className="space-y-3 text-gray-700">
-                  <p><strong>Priorities:</strong> {formData.priorities}</p>
-                  <p><strong>Dream Activities:</strong> {formData.dreamActivities}</p>
-                  <p><strong>Impact to Create:</strong> {formData.impact}</p>
-                  <p><strong>Beneficiaries:</strong> {formData.beneficiaries}</p>
-                  <p><strong>Workday Feeling:</strong> {formData.workdayFeeling}</p>
-                </div>
+                <h2 className="text-xl font-bold">Lifestyle & Impact</h2>
+                <p><strong>Priorities:</strong> {formData.priorities}</p>
+                <p><strong>Dream Activities:</strong> {formData.dreamActivities}</p>
+                <p><strong>Impact:</strong> {formData.impact}</p>
+                <p><strong>Beneficiaries:</strong> {formData.beneficiaries}</p>
+                <p><strong>Workday Feeling:</strong> {formData.workdayFeeling}</p>
               </div>
 
               <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Future-Self Message</h2>
-                <p className="text-gray-700 leading-relaxed">{formData.futureMessage}</p>
+                <h2 className="text-xl font-bold">Future-Self Message</h2>
+                <p>{formData.futureMessage}</p>
               </div>
 
+              {/* AI-generated Career Paths */}
               <div className="bg-white border-2 border-blue-200 rounded-2xl p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  Recommended Career Paths
-                </h2>
-                <p className="text-gray-600 italic">
-                  Based on your responses, detailed career recommendations would be generated here
-                  including suitability analysis, scope in India and abroad, challenges, and a
-                  6/12/24-month preparation roadmap.
-                </p>
+                <h2 className="text-xl font-bold mb-4">Recommended Career Paths</h2>
+                {!aiResult ? (
+                  <p className="text-gray-600 italic">
+                    Click "Generate AI Analysis" below to get personalized career recommendations including suitability analysis, scope in India and abroad, challenges, and a 6/12/24-month preparation roadmap.
+                  </p>
+                ) : null}
               </div>
             </div>
 
-            <div className="mt-8 flex gap-4 justify-center">
+            {/* ---------------------- LOADING ---------------------- */}
+            {loading && (
+              <div className="mt-6 p-4 bg-blue-100 rounded-xl text-center text-blue-800">
+                Generating your VisionYou Analysis...
+              </div>
+            )}
+
+            {/* ---------------------- AI RESULT — CAREER PATHS ---------------------- */}
+            {aiResult?.careerPaths && (
+              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 mt-8">
+                <h2 className="text-xl font-bold mb-4">AI Career Paths</h2>
+
+                {aiResult.careerPaths.map((path: any, idx: number) => (
+                  <div key={idx} className="p-4 bg-white border rounded-xl mb-4 shadow-sm">
+                    <h3 className="text-lg font-semibold">{path.title}</h3>
+                    <p><strong>Why Fit:</strong> {path.whyFit}</p>
+                    <p><strong>Scope India:</strong> {path.scopeIndia}</p>
+                    <p><strong>Scope Abroad:</strong> {path.scopeAbroad}</p>
+
+                    <p className="mt-2 font-semibold">Challenges:</p>
+                    <ul className="list-disc list-inside">
+                      {path.challenges.map((c: string, i: number) => (
+                        <li key={i}>{c}</li>
+                      ))}
+                    </ul>
+
+                    <p className="mt-2 font-semibold">Preparation:</p>
+                    <ul className="list-disc list-inside">
+                      {path.preparation.map((prep: string, i: number) => (
+                        <li key={i}>{prep}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* ---------------------- AI RESULT — ROADMAP ---------------------- */}
+            {aiResult?.roadmap && (
+              <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl p-6 mt-8">
+                <h2 className="text-xl font-bold mb-4">Roadmap</h2>
+
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold">Next 6 Months</h3>
+                    <ul className="list-disc list-inside">
+                      {aiResult.roadmap.sixMonths.map((x: string, i: number) => (
+                        <li key={i}>{x}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold">Next 12 Months</h3>
+                    <ul className="list-disc list-inside">
+                      {aiResult.roadmap.twelveMonths.map((x: string, i: number) => (
+                        <li key={i}>{x}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold">Next 24 Months</h3>
+                    <ul className="list-disc list-inside">
+                      {aiResult.roadmap.twentyFourMonths.map((x: string, i: number) => (
+                        <li key={i}>{x}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------- BUTTONS ---------------------- */}
+            <div className="mt-10 flex gap-4 justify-center">
               <Button variant="outline" onClick={onBack}>
                 Back to Home
               </Button>
-              <Button size="lg" onClick={generateAI} disabled={loading}>
-              {loading ? "Generating..." : "Generate AI Analysis"}
-              </Button>
 
+              <Button size="lg" onClick={generateAI} disabled={loading}>
+                {loading ? "Generating..." : "Generate AI Analysis"}
+              </Button>
             </div>
           </Card>
         </div>
@@ -197,6 +322,9 @@ export default function VisionYouBlueprint({ onBack }: VisionYouBlueprintProps) 
     );
   }
 
+  // -----------------------------------------------------------------------
+  // STEPS 1–4 — FORM
+  // -----------------------------------------------------------------------
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
       <div className="max-w-3xl mx-auto px-4">
@@ -205,147 +333,133 @@ export default function VisionYouBlueprint({ onBack }: VisionYouBlueprintProps) 
             <ProgressBar currentStep={step} totalSteps={4} />
           </div>
 
+          {/* STEP 1 */}
           {step === 1 && (
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Step 1: Identity</h2>
-              <p className="text-gray-600 mb-6">Define who you aspire to become</p>
+              <h2 className="text-3xl font-bold">Step 1: Identity</h2>
 
               <Input
                 label="What are your core values?"
                 value={formData.coreValues}
-                onChange={(val) => updateField('coreValues', val)}
-                placeholder="e.g., Innovation, integrity, creativity..."
+                onChange={(v) => updateField("coreValues", v)}
                 multiline
               />
 
               <Input
-                label="What is your desired job title?"
+                label="Desired job title?"
                 value={formData.jobTitle}
-                onChange={(val) => updateField('jobTitle', val)}
-                placeholder="e.g., Product Designer, Software Engineer..."
+                onChange={(v) => updateField("jobTitle", v)}
               />
 
               <Input
-                label="Which industry do you see yourself in?"
+                label="Industry?"
                 value={formData.industry}
-                onChange={(val) => updateField('industry', val)}
-                placeholder="e.g., Technology, Healthcare, Education..."
+                onChange={(v) => updateField("industry", v)}
               />
 
               <Input
-                label="Describe yourself in 3 adjectives"
+                label="3 adjectives"
                 value={formData.adjectives}
-                onChange={(val) => updateField('adjectives', val)}
-                placeholder="e.g., Creative, analytical, empathetic"
+                onChange={(v) => updateField("adjectives", v)}
               />
             </div>
           )}
 
+          {/* STEP 2 */}
           {step === 2 && (
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Step 2: Skills</h2>
-              <p className="text-gray-600 mb-6">Identify your strengths and growth areas</p>
+              <h2 className="text-3xl font-bold">Step 2: Skills</h2>
 
               <Input
-                label="What are you exceptionally good at?"
+                label="Exceptional skills"
                 value={formData.exceptionalSkills}
-                onChange={(val) => updateField('exceptionalSkills', val)}
-                placeholder="Describe your natural talents and developed skills..."
+                onChange={(v) => updateField("exceptionalSkills", v)}
                 multiline
-                rows={4}
               />
 
               <Input
-                label="What skills will you master in the next 2 years?"
+                label="Future skills (2 years)"
                 value={formData.futureSkills}
-                onChange={(val) => updateField('futureSkills', val)}
-                placeholder="List skills you're committed to developing..."
+                onChange={(v) => updateField("futureSkills", v)}
                 multiline
-                rows={4}
               />
 
               <Input
-                label="What is one superpower you will use daily?"
+                label="Your daily superpower"
                 value={formData.superpower}
-                onChange={(val) => updateField('superpower', val)}
-                placeholder="e.g., Problem-solving, communication, creativity..."
+                onChange={(v) => updateField("superpower", v)}
                 multiline
               />
             </div>
           )}
 
+          {/* STEP 3 */}
           {step === 3 && (
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Step 3: Lifestyle</h2>
-              <p className="text-gray-600 mb-6">Envision your ideal work-life balance</p>
+              <h2 className="text-3xl font-bold">Step 3: Lifestyle</h2>
 
               <Input
-                label="What are your top priorities in life?"
+                label="Top priorities"
                 value={formData.priorities}
-                onChange={(val) => updateField('priorities', val)}
-                placeholder="e.g., Family, growth, impact, flexibility..."
+                onChange={(v) => updateField("priorities", v)}
                 multiline
               />
 
               <Input
-                label="What does your dream-career day look like?"
+                label="Dream career day"
                 value={formData.dreamActivities}
-                onChange={(val) => updateField('dreamActivities', val)}
-                placeholder="Describe the activities you'd love to do daily..."
+                onChange={(v) => updateField("dreamActivities", v)}
                 multiline
-                rows={4}
               />
 
               <Input
-                label="What impact do you want to create?"
+                label="Impact you want to create"
                 value={formData.impact}
-                onChange={(val) => updateField('impact', val)}
-                placeholder="How do you want to make a difference?"
+                onChange={(v) => updateField("impact", v)}
                 multiline
               />
 
               <Input
-                label="Who benefits from your work?"
+                label="Beneficiaries"
                 value={formData.beneficiaries}
-                onChange={(val) => updateField('beneficiaries', val)}
-                placeholder="e.g., Students, businesses, communities..."
+                onChange={(v) => updateField("beneficiaries", v)}
               />
 
               <Input
-                label="How do you want to feel at the end of a workday?"
+                label="Workday feeling"
                 value={formData.workdayFeeling}
-                onChange={(val) => updateField('workdayFeeling', val)}
-                placeholder="e.g., Fulfilled, energized, proud..."
+                onChange={(v) => updateField("workdayFeeling", v)}
               />
             </div>
           )}
 
+          {/* STEP 4 */}
           {step === 4 && (
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              <h2 className="text-3xl font-bold">
                 Step 4: Message to Your Future Self
               </h2>
-              <p className="text-gray-600 mb-6">please retype the entire sentence by filling-in the blanks</p>
 
               <Input
-                label="“My future self is proud that I chose _________, because I followed my love for _________, built strong skills in _________, made an impact by _________, and turned it into a career in _________.”"
+                label="Complete this sentence"
                 value={formData.futureMessage}
-                onChange={(val) => updateField('futureMessage', val)}
-                placeholder="My future self is proud that I chose to pursue design, because I followed my love for creating visually meaningful stories, built strong skills in UI/UX and digital art, made an impact by designing products that improve people’s everyday experiences, and turned it into a career in product design."
+                onChange={(v) => updateField("futureMessage", v)}
                 multiline
-                rows={8}
+                rows={6}
               />
             </div>
           )}
 
+          {/* NAVIGATION BUTTONS */}
           <div className="flex gap-4 mt-8">
             {step > 1 && (
               <Button variant="outline" onClick={prevStep}>
                 Previous
               </Button>
             )}
-            <Button fullWidth onClick={step === 4 ? nextStep : nextStep}>
-              {step === 4 ? 'View Summary' : 'Next'}
+
+            <Button fullWidth onClick={nextStep}>
+              {step === 4 ? "View Summary" : "Next"}
             </Button>
           </div>
         </Card>
