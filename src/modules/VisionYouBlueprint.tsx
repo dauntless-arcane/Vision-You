@@ -35,7 +35,7 @@ export default function VisionYouBlueprint({
   const [aiResult, setAIResult] = useState<any>(null);
 
   // Mock data fallback
-  const mockData = {
+  /*const mockData = {
     visionYouSummary: {
       identity: {
         coreValues: ["Integrity", "Creativity", "Growth"],
@@ -80,7 +80,7 @@ export default function VisionYouBlueprint({
       twelveMonths: ["Internship", "Advanced Figma skills", "2 case studies"],
       twentyFourMonths: ["Full-time role", "Deep design specialization"]
     }
-  };
+  };*/
 
   const [formData, setFormData] = useState<FormData>({
     coreValues: "",
@@ -133,16 +133,19 @@ export default function VisionYouBlueprint({
         } catch (e) {
           console.error("JSON parse error:", e);
           // Use mock data as fallback
-          setAIResult(mockData);
+          //setAIResult(mockData);
+          setAIResult(null);
         }
       } else {
         // Use mock data if structure is unexpected
-        setAIResult(mockData);
+        //setAIResult(mockData);
+        setAIResult(null);
       }
     } catch (err) {
       console.error("API Error:", err);
       // Use mock data as fallback
-      setAIResult(mockData);
+      //setAIResult(mockData);
+      setAIResult(false);
     }
 
     setLoading(false);
@@ -179,148 +182,162 @@ export default function VisionYouBlueprint({
     );
   }
 
-  // -----------------------------------------------------------------------
-  // STEP 5 — FINAL SUMMARY PAGE
-  // -----------------------------------------------------------------------
-  if (step === 5) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
-        <div className="max-w-4xl mx-auto px-4">
-          <Card className="p-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-              Your VisionYou Summary
-            </h1>
+// -----------------------------------------------------------------------
+// STEP 5 — FINAL SUMMARY PAGE (AI-Only)
+// -----------------------------------------------------------------------
+if (step === 5) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
+      <div className="max-w-4xl mx-auto px-4">
+        <Card className="p-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Your VisionYou Summary
+          </h1>
 
-            {/* ---------------------- USER WRITTEN SUMMARY ---------------------- */}
-            <div className="space-y-6">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
-                <h2 className="text-xl font-bold">Identity</h2>
-                <p><strong>Core Values:</strong> {formData.coreValues}</p>
-                <p><strong>Desired Job Title:</strong> {formData.jobTitle}</p>
-                <p><strong>Industry:</strong> {formData.industry}</p>
-                <p><strong>Adjectives:</strong> {formData.adjectives}</p>
-              </div>
-
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6">
-                <h2 className="text-xl font-bold">Skills & Strengths</h2>
-                <p><strong>Exceptional Skills:</strong> {formData.exceptionalSkills}</p>
-                <p><strong>Future Skills:</strong> {formData.futureSkills}</p>
-                <p><strong>Superpower:</strong> {formData.superpower}</p>
-              </div>
-
-              <div className="bg-gradient-to-r from-pink-50 to-blue-50 rounded-2xl p-6">
-                <h2 className="text-xl font-bold">Lifestyle & Impact</h2>
-                <p><strong>Priorities:</strong> {formData.priorities}</p>
-                <p><strong>Dream Activities:</strong> {formData.dreamActivities}</p>
-                <p><strong>Impact:</strong> {formData.impact}</p>
-                <p><strong>Beneficiaries:</strong> {formData.beneficiaries}</p>
-                <p><strong>Workday Feeling:</strong> {formData.workdayFeeling}</p>
-              </div>
-
-              <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-6">
-                <h2 className="text-xl font-bold">Future-Self Message</h2>
-                <p>{formData.futureMessage}</p>
-              </div>
-
-              {/* AI-generated Career Paths */}
-              <div className="bg-white border-2 border-blue-200 rounded-2xl p-6">
-                <h2 className="text-xl font-bold mb-4">Recommended Career Paths</h2>
-                {!aiResult ? (
-                  <p className="text-gray-600 italic">
-                    Click "Generate AI Analysis" below to get personalized career recommendations including suitability analysis, scope in India and abroad, challenges, and a 6/12/24-month preparation roadmap.
-                  </p>
-                ) : null}
-              </div>
+          {/* ---------------------- USER-WRITTEN SUMMARY ---------------------- */}
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
+              <h2 className="text-xl font-bold">Identity</h2>
+              <p><strong>Core Values:</strong> {formData.coreValues}</p>
+              <p><strong>Desired Job Title:</strong> {formData.jobTitle}</p>
+              <p><strong>Industry:</strong> {formData.industry}</p>
+              <p><strong>Adjectives:</strong> {formData.adjectives}</p>
             </div>
 
-            {/* ---------------------- LOADING ---------------------- */}
-            {loading && (
-              <div className="mt-6 p-4 bg-blue-100 rounded-xl text-center text-blue-800">
-                Generating your VisionYou Analysis...
-              </div>
-            )}
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6">
+              <h2 className="text-xl font-bold">Skills & Strengths</h2>
+              <p><strong>Exceptional Skills:</strong> {formData.exceptionalSkills}</p>
+              <p><strong>Future Skills:</strong> {formData.futureSkills}</p>
+              <p><strong>Superpower:</strong> {formData.superpower}</p>
+            </div>
 
-            {/* ---------------------- AI RESULT — CAREER PATHS ---------------------- */}
-            {aiResult?.careerPaths && (
-              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 mt-8">
-                <h2 className="text-xl font-bold mb-4">AI Career Paths</h2>
+            <div className="bg-gradient-to-r from-pink-50 to-blue-50 rounded-2xl p-6">
+              <h2 className="text-xl font-bold">Lifestyle & Impact</h2>
+              <p><strong>Priorities:</strong> {formData.priorities}</p>
+              <p><strong>Dream Activities:</strong> {formData.dreamActivities}</p>
+              <p><strong>Impact:</strong> {formData.impact}</p>
+              <p><strong>Beneficiaries:</strong> {formData.beneficiaries}</p>
+              <p><strong>Workday Feeling:</strong> {formData.workdayFeeling}</p>
+            </div>
 
-                {aiResult.careerPaths.map((path: any, idx: number) => (
-                  <div key={idx} className="p-4 bg-white border rounded-xl mb-4 shadow-sm">
-                    <h3 className="text-lg font-semibold">{path.title}</h3>
-                    <p><strong>Why Fit:</strong> {path.whyFit}</p>
-                    <p><strong>Scope India:</strong> {path.scopeIndia}</p>
-                    <p><strong>Scope Abroad:</strong> {path.scopeAbroad}</p>
+            <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-6">
+              <h2 className="text-xl font-bold">Future-Self Message</h2>
+              <p>{formData.futureMessage}</p>
+            </div>
 
-                    <p className="mt-2 font-semibold">Challenges:</p>
-                    <ul className="list-disc list-inside">
-                      {path.challenges.map((c: string, i: number) => (
-                        <li key={i}>{c}</li>
-                      ))}
-                    </ul>
+            {/* Placeholder for AI results */}
+            <div className="bg-white border-2 border-blue-200 rounded-2xl p-6">
+              <h2 className="text-xl font-bold mb-4">Recommended Career Paths</h2>
 
-                    <p className="mt-2 font-semibold">Preparation:</p>
-                    <ul className="list-disc list-inside">
-                      {path.preparation.map((prep: string, i: number) => (
-                        <li key={i}>{prep}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            )}
+              {!aiResult && !loading && (
+                <p className="text-gray-600 italic">
+                  Click “Generate AI Analysis” below to receive personalized career
+                  recommendations, scope insights, challenges, and a 6/12/24-month roadmap.
+                </p>
+              )}
+            </div>
+          </div>
 
-            {/* ---------------------- AI RESULT — ROADMAP ---------------------- */}
-            {aiResult?.roadmap && (
-              <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl p-6 mt-8">
-                <h2 className="text-xl font-bold mb-4">Roadmap</h2>
+          {/* ---------------------- LOADING ---------------------- */}
+          {loading && (
+            <div className="mt-6 p-4 bg-blue-100 rounded-xl text-center text-blue-800">
+              Generating your VisionYou Analysis...
+            </div>
+          )}
 
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold">Next 6 Months</h3>
-                    <ul className="list-disc list-inside">
-                      {aiResult.roadmap.sixMonths.map((x: string, i: number) => (
-                        <li key={i}>{x}</li>
-                      ))}
-                    </ul>
-                  </div>
+          {/* ---------------------- EMPTY AI STATE ---------------------- */}
+          {!loading && !aiResult && (
+            <div className="mt-6 p-4 bg-gray-100 rounded-xl text-center text-gray-700">
+              No AI analysis yet. Click “Generate AI Analysis” to continue.
+            </div>
+          )}
 
-                  <div>
-                    <h3 className="font-semibold">Next 12 Months</h3>
-                    <ul className="list-disc list-inside">
-                      {aiResult.roadmap.twelveMonths.map((x: string, i: number) => (
-                        <li key={i}>{x}</li>
-                      ))}
-                    </ul>
-                  </div>
+          {/* ---------------------- AI RESULT — CAREER PATHS ---------------------- */}
+          {aiResult?.careerPaths && (
+            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 mt-8">
+              <h2 className="text-xl font-bold mb-4">AI Career Paths</h2>
 
-                  <div>
-                    <h3 className="font-semibold">Next 24 Months</h3>
-                    <ul className="list-disc list-inside">
-                      {aiResult.roadmap.twentyFourMonths.map((x: string, i: number) => (
-                        <li key={i}>{x}</li>
-                      ))}
-                    </ul>
-                  </div>
+              {aiResult.careerPaths.map((path: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="p-4 bg-white border rounded-xl mb-4 shadow-sm"
+                >
+                  <h3 className="text-lg font-semibold">{path.title}</h3>
+
+                  <p><strong>Why Fit:</strong> {path.whyFit}</p>
+                  <p><strong>Scope India:</strong> {path.scopeIndia}</p>
+                  <p><strong>Scope Abroad:</strong> {path.scopeAbroad}</p>
+
+                  <p className="mt-2 font-semibold">Challenges:</p>
+                  <ul className="list-disc list-inside">
+                    {path.challenges.map((c: string, i: number) => (
+                      <li key={i}>{c}</li>
+                    ))}
+                  </ul>
+
+                  <p className="mt-2 font-semibold">Preparation:</p>
+                  <ul className="list-disc list-inside">
+                    {path.preparation.map((prep: string, i: number) => (
+                      <li key={i}>{prep}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ---------------------- AI RESULT — ROADMAP ---------------------- */}
+          {aiResult?.roadmap && (
+            <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl p-6 mt-8">
+              <h2 className="text-xl font-bold mb-4">Roadmap</h2>
+
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold">Next 6 Months</h3>
+                  <ul className="list-disc list-inside">
+                    {aiResult.roadmap.sixMonths.map((x: string, i: number) => (
+                      <li key={i}>{x}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">Next 12 Months</h3>
+                  <ul className="list-disc list-inside">
+                    {aiResult.roadmap.twelveMonths.map((x: string, i: number) => (
+                      <li key={i}>{x}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold">Next 24 Months</h3>
+                  <ul className="list-disc list-inside">
+                    {aiResult.roadmap.twentyFourMonths.map((x: string, i: number) => (
+                      <li key={i}>{x}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            )}
-
-            {/* ---------------------- BUTTONS ---------------------- */}
-            <div className="mt-10 flex gap-4 justify-center">
-              <Button variant="outline" onClick={onBack}>
-                Back to Home
-              </Button>
-
-              <Button size="lg" onClick={generateAI} disabled={loading}>
-                {loading ? "Generating..." : "Generate AI Analysis"}
-              </Button>
             </div>
-          </Card>
-        </div>
+          )}
+
+          {/* ---------------------- BUTTONS ---------------------- */}
+          <div className="mt-10 flex gap-4 justify-center">
+            <Button variant="outline" onClick={onBack}>
+              Back to Home
+            </Button>
+
+            <Button size="lg" onClick={generateAI} disabled={loading}>
+              {loading ? "Generating..." : "Generate AI Analysis"}
+            </Button>
+          </div>
+        </Card>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   // -----------------------------------------------------------------------
   // STEPS 1–4 — FORM

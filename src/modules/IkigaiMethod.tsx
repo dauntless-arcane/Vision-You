@@ -35,6 +35,7 @@ export default function IkigaiMethod({ onBack }: IkigaiMethodProps) {
   // ---------------------------------------------------------------------
   //  HARD-CODED MOCK IKIGAI JSON 
   // ---------------------------------------------------------------------
+  /*
   const mockIkigaiData = {
     ikigaiSummary: {
       passion: ["Design", "Helping Others", "Creating Solutions"],
@@ -124,7 +125,7 @@ export default function IkigaiMethod({ onBack }: IkigaiMethodProps) {
         ],
       },
     ],
-  };
+  };*/
 
   // ---------------------------------------------------------------------
   // 🔥 PARSER — If AI returns plain text JSON → convert safely
@@ -135,8 +136,8 @@ export default function IkigaiMethod({ onBack }: IkigaiMethodProps) {
     try {
       return JSON.parse(data);
     } catch {
-      console.warn("AI response not valid JSON. Using fallback.");
-      return mockIkigaiData;
+      console.warn("AI response not valid JSON.");
+      return null;
     }
   };
 
@@ -159,12 +160,11 @@ export default function IkigaiMethod({ onBack }: IkigaiMethodProps) {
       const parsed = parseIkigaiResponse(raw);
 
       setIkigaiResult(parsed);
-    } catch (err) {
+    }catch (err) {
       console.error("Ikigai API Error:", err);
-
-      // fallback
-      setIkigaiResult(mockIkigaiData);
+      setIkigaiResult(null);
     }
+
 
     setLoading(false);
   };
@@ -224,116 +224,121 @@ export default function IkigaiMethod({ onBack }: IkigaiMethodProps) {
     );
   }
 
-  // ---------------------------------------------------------------------
-  // STEP 5 – FULL IKIGAI ANALYSIS (AI + MOCK DATA INTEGRATED)
-  // ---------------------------------------------------------------------
-  if (step === 5) {
-    const data = ikigaiResult;
+// ---------------------------------------------------------------------
+// STEP 5 – FULL IKIGAI ANALYSIS (AI ONLY, NO STATIC DATA)
+// ---------------------------------------------------------------------
+if (step === 5) {
+  const data = ikigaiResult;
 
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
-        <div className="max-w-4xl mx-auto px-4">
-          <Card className="p-8">
-            <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
-              Your Ikigai Analysis
-            </h1>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
+      <div className="max-w-4xl mx-auto px-4">
+        <Card className="p-8">
+          <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
+            Your Ikigai Analysis
+          </h1>
 
-            {/* Loading */}
-            {loading && (
-              <div className="p-4 bg-blue-100 rounded-xl text-center text-blue-800 mb-4">
-                Generating your personalized Ikigai analysis...
-              </div>
-            )}
-
-            {/* SUMMARY */}
-            {data && (
-              <>
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl mb-8">
-                  <h2 className="text-xl font-bold mb-3">Ikigai Overlap Summary</h2>
-                  <p className="text-gray-700">{data.ikigaiSummary.overlap}</p>
-                </div>
-
-                {/* Career Themes */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl mb-8">
-                  <h2 className="text-xl font-bold mb-3">Strongest Career Themes</h2>
-                  <ul className="list-disc list-inside text-gray-700">
-                    {data.careerThemes.map((t: string, i: number) => (
-                      <li key={i}>{t}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Top Career Directions */}
-                <div className="bg-gradient-to-r from-pink-50 to-blue-50 p-6 rounded-2xl mb-8">
-                  <h2 className="text-xl font-bold mb-3">Top 3 Career Directions</h2>
-                  <div className="space-y-3">
-                    {data.topCareerDirections.map((c: any, i: number) => (
-                      <div key={i} className="p-4 bg-white rounded-xl shadow-sm">
-                        <h3 className="font-bold text-gray-900">{c.title}</h3>
-                        <p className="text-gray-700">{c.reason}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* JOB ROLES */}
-                <h2 className="text-xl font-bold mb-3">Top 10 Job Roles</h2>
-
-                {data.jobRoles.map((role: any, index: number) => (
-                  <Accordion key={index} title={`${index + 1}. ${role.title}`}>
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-semibold mb-1">Description</h4>
-                        <p>{role.description}</p>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold mb-1">Scope in India</h4>
-                        <p>{role.scopeIndia}</p>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold mb-1">Scope Abroad</h4>
-                        <p>{role.scopeAbroad}</p>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold mb-1">Challenges</h4>
-                        <ul className="list-disc list-inside">
-                          {role.challenges.map((c: string, i: number) => (
-                            <li key={i}>{c}</li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="bg-blue-50 p-3 rounded-xl">
-                        <h4 className="font-semibold mb-1">Preparation Steps</h4>
-                        <ul className="list-disc list-inside">
-                          {role.preparation.map((c: string, i: number) => (
-                            <li key={i}>{c}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </Accordion>
-                ))}
-              </>
-            )}
-
-            {/* BUTTONS */}
-            <div className="mt-10 flex gap-4 justify-center">
-              <Button variant="outline" onClick={onBack}>
-                Back to Home
-              </Button>
-              <Button size="lg" onClick={generateIkigai} disabled={loading}>
-                {loading ? "Generating..." : "Regenerate AI Analysis"}
-              </Button>
+          {/* Loading */}
+          {loading && (
+            <div className="p-4 bg-blue-100 rounded-xl text-center text-blue-800 mb-4">
+              Generating your personalized Ikigai analysis...
             </div>
-          </Card>
-        </div>
+          )}
+
+          {/* No AI Result Yet */}
+          {!data && !loading && (
+            <div className="p-4 bg-gray-100 rounded-xl text-center text-gray-700 mb-6">
+              No AI results yet. Click below to generate your Ikigai analysis.
+            </div>
+          )}
+
+          {/* AI RESULTS */}
+          {data && (
+            <>
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl mb-8">
+                <h2 className="text-xl font-bold mb-3">Ikigai Overlap Summary</h2>
+                <p className="text-gray-700">{data.ikigaiSummary.overlap}</p>
+              </div>
+
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-2xl mb-8">
+                <h2 className="text-xl font-bold mb-3">Strongest Career Themes</h2>
+                <ul className="list-disc list-inside text-gray-700">
+                  {data.careerThemes.map((t: string, i: number) => (
+                    <li key={i}>{t}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-gradient-to-r from-pink-50 to-blue-50 p-6 rounded-2xl mb-8">
+                <h2 className="text-xl font-bold mb-3">Top Career Directions</h2>
+                <div className="space-y-3">
+                  {data.topCareerDirections.map((c: any, i: number) => (
+                    <div key={i} className="p-4 bg-white rounded-xl shadow-sm">
+                      <h3 className="font-bold text-gray-900">{c.title}</h3>
+                      <p className="text-gray-700">{c.reason}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <h2 className="text-xl font-bold mb-3">Top Job Roles</h2>
+
+              {data.jobRoles.map((role: any, index: number) => (
+                <Accordion key={index} title={`${index + 1}. ${role.title}`}>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold mb-1">Description</h4>
+                      <p>{role.description}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-1">Scope in India</h4>
+                      <p>{role.scopeIndia}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-1">Scope Abroad</h4>
+                      <p>{role.scopeAbroad}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-1">Challenges</h4>
+                      <ul className="list-disc list-inside">
+                        {role.challenges.map((c: string, i: number) => (
+                          <li key={i}>{c}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="bg-blue-50 p-3 rounded-xl">
+                      <h4 className="font-semibold mb-1">Preparation Steps</h4>
+                      <ul className="list-disc list-inside">
+                        {role.preparation.map((c: string, i: number) => (
+                          <li key={i}>{c}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </Accordion>
+              ))}
+            </>
+          )}
+
+          {/* BUTTONS */}
+          <div className="mt-10 flex gap-4 justify-center">
+            <Button variant="outline" onClick={onBack}>
+              Back to Home
+            </Button>
+            <Button size="lg" onClick={generateIkigai} disabled={loading}>
+              {loading ? "Generating..." : "Generate AI Analysis"}
+            </Button>
+          </div>
+        </Card>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   // ---------------------------------------------------------------------
   // STEPS 1–4 (QUESTIONS)

@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { ClipboardCheck } from "lucide-react";
+import { useState } from "react";
 import Button from "../components/Button";
 import Card from "../components/Card";
 
@@ -222,102 +222,94 @@ export default function CareerGuidance({ onBack }: CareerGuidanceProps) {
   }
 
   // ------------------------- STEP 2 — RESULTS -------------------------
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <Card className="p-8">
-          <h1 className="text-3xl font-bold text-center mb-2">
-            Your Career Matches
-          </h1>
-          <p className="text-center text-gray-600 mb-8">
-            Based on {selectedTasks.length} selected tasks
-          </p>
+return (
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12">
+    <div className="max-w-4xl mx-auto px-4">
+      <Card className="p-8">
+        <h1 className="text-3xl font-bold text-center mb-2">
+          Your Career Matches
+        </h1>
+        <p className="text-center text-gray-600 mb-8">
+          Based on {selectedTasks.length} selected tasks
+        </p>
 
-          {/* LOADING */}
-          {loading && (
-            <div className="p-4 bg-blue-100 rounded-xl text-center text-blue-700 mb-6">
-              Generating AI-powered career suggestions...
-            </div>
-          )}
-
-          {/* ---------------- Static Job Matches ---------------- */}
-          {!aiResult && (
-            <div className="space-y-6">
-              {staticJobMatches.map((job, index) => (
-                <Card key={index} className="p-6 hover:shadow-xl">
-                  <h2 className="text-2xl font-bold">{job.title}</h2>
-                  <p className="text-purple-600 text-sm mb-3">
-                    Matches tasks: {job.matchedTasks.join(", ")}
-                  </p>
-                  <p className="text-gray-700">{job.description}</p>
-                </Card>
-              ))}
-            </div>
-          )}
-
-          {/* ---------------- AI-Generated Careers ---------------- */}
-          {aiResult?.careers && (
-            <div className="space-y-6 mt-8">
-              <h2 className="text-xl font-bold text-center">
-                AI Suggested Careers
-              </h2>
-
-              {aiResult.careers.map((item: any, idx: number) => (
-                <Card key={idx} className="p-6 hover:shadow-xl">
-                  <h2 className="text-2xl font-bold">{item.title}</h2>
-
-                  <p className="mt-2">
-                    <strong>Why Fit:</strong> {item.whyFit}
-                  </p>
-
-                  <div className="grid md:grid-cols-2 gap-4 mt-4">
-                    <div className="bg-blue-50 p-4 rounded-xl">
-                      <strong>Scope in India:</strong>
-                      <p>{item.scopeIndia}</p>
-                    </div>
-                    <div className="bg-purple-50 p-4 rounded-xl">
-                      <strong>Scope Abroad:</strong>
-                      <p>{item.scopeAbroad}</p>
-                    </div>
-                  </div>
-
-                  <div className="bg-green-50 p-4 rounded-xl mt-4">
-                    <strong>Future Growth:</strong>
-                    <p>{item.futureGrowth}</p>
-                  </div>
-
-                  <div className="mt-4">
-                    <strong>Similar Careers:</strong>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {item.similarCareers.map((c: string, i: number) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 bg-gray-100 rounded-full text-sm"
-                        >
-                          {c}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          )}
-
-          {/* BUTTONS */}
-          <div className="mt-10 flex gap-4 justify-center">
-            <Button variant="outline" onClick={() => setStep(1)}>
-              Adjust Tasks
-            </Button>
-            <Button variant="outline" onClick={onBack}>
-              Back to Home
-            </Button>
-            <Button size="lg" onClick={generateAI} disabled={loading}>
-              {loading ? "Generating..." : "Generate AI Analysis"}
-            </Button>
+        {/* LOADING */}
+        {loading && (
+          <div className="p-4 bg-blue-100 rounded-xl text-center text-blue-700 mb-6">
+            Generating AI-powered career suggestions...
           </div>
-        </Card>
-      </div>
+        )}
+
+        {/* ---------------- AI RESULTS ONLY (removed static data) ---------------- */}
+        {!aiResult?.careers && !loading && (
+          <div className="p-4 bg-gray-100 rounded-xl text-center text-gray-600 mb-6">
+            No AI results yet. Click below to generate your personalized career analysis.
+          </div>
+        )}
+
+        {aiResult?.careers && (
+          <div className="space-y-6 mt-8">
+            <h2 className="text-xl font-bold text-center">
+              AI Suggested Careers
+            </h2>
+
+            {aiResult.careers.map((item: any, idx: number) => (
+              <Card key={idx} className="p-6 hover:shadow-xl">
+                <h2 className="text-2xl font-bold">{item.title}</h2>
+
+                <p className="mt-2">
+                  <strong>Why Fit:</strong> {item.whyFit}
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  <div className="bg-blue-50 p-4 rounded-xl">
+                    <strong>Scope in India:</strong>
+                    <p>{item.scopeIndia}</p>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-xl">
+                    <strong>Scope Abroad:</strong>
+                    <p>{item.scopeAbroad}</p>
+                  </div>
+                </div>
+
+                <div className="bg-green-50 p-4 rounded-xl mt-4">
+                  <strong>Future Growth:</strong>
+                  <p>{item.futureGrowth}</p>
+                </div>
+
+                <div className="mt-4">
+                  <strong>Similar Careers:</strong>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {item.similarCareers.map((c: string, i: number) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* BUTTONS */}
+        <div className="mt-10 flex gap-4 justify-center">
+          <Button variant="outline" onClick={() => setStep(1)}>
+            Adjust Tasks
+          </Button>
+          <Button variant="outline" onClick={onBack}>
+            Back to Home
+          </Button>
+          <Button size="lg" onClick={generateAI} disabled={loading}>
+            {loading ? "Generating..." : "Generate AI Analysis"}
+          </Button>
+        </div>
+      </Card>
     </div>
-  );
+  </div>
+);
+
 }
