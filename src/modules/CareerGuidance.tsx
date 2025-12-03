@@ -55,7 +55,7 @@ const tasks = [
   "User experience testing",
 ];
 
-const staticJobMatches = [
+/*const staticJobMatches = [
   {
     title: "UX Researcher",
     matchedTasks: [1, 9, 12, 45],
@@ -103,7 +103,7 @@ const staticJobMatches = [
       "Analytics Consultant",
     ],
   },
-];
+];*/
 
 export default function CareerGuidance({ onBack }: CareerGuidanceProps) {
   const [step, setStep] = useState(0);
