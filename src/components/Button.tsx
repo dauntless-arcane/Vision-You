@@ -5,6 +5,7 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   type?: 'button' | 'submit';
+  disabled?: boolean;
 }
 
 export default function Button({
