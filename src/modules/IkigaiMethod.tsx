@@ -33,7 +33,7 @@ export default function IkigaiMethod({ onBack }: IkigaiMethodProps) {
   const [ikigaiResult, setIkigaiResult] = useState<any>(null);
 
   // ---------------------------------------------------------------------
-  // 🔥 HARD-CODED MOCK IKIGAI JSON (inside component as requested)
+  //  HARD-CODED MOCK IKIGAI JSON 
   // ---------------------------------------------------------------------
   const mockIkigaiData = {
     ikigaiSummary: {
