@@ -165,8 +165,14 @@ export default function VisionYouBlueprint({
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               VisionYou
             </h1>
+            
             <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
-              Let's create your VisionYou — the future, upgraded version of you.
+              <strong>VisionYou = The future, upgraded version of you.</strong>
+              <br></br>
+The you who is more confident, skilled, balanced, successful, and aligned with your goals. VisionYou helps you create a direction. Instead of living day-to-day, you start living with purpose.
+It’s basically imagining who you want to become, how you want to live,what kind of work you want to do,what habits and mindset you want to adopt.
+            <br></br><strong>Describe Future You across the following pillars:
+            </strong>
             </p>
             <div className="flex gap-4 justify-center">
               <Button variant="ghost" onClick={onBack}>
@@ -356,26 +362,26 @@ if (step === 5) {
               <h2 className="text-3xl font-bold">Step 1: Identity</h2>
 
               <Input
-                label="What are your core values?"
+                label="VisionYou’s core values are..."
                 value={formData.coreValues}
                 onChange={(v) => updateField("coreValues", v)}
                 multiline
               />
 
               <Input
-                label="Desired job title?"
+                label="VisionYou’s job title is..."
                 value={formData.jobTitle}
                 onChange={(v) => updateField("jobTitle", v)}
               />
 
               <Input
-                label="Industry?"
+                label="VisionYou will be working in the ...(industry)"
                 value={formData.industry}
                 onChange={(v) => updateField("industry", v)}
               />
 
               <Input
-                label="3 adjectives"
+                label="Three adjectives that best describe VisionYou..."
                 value={formData.adjectives}
                 onChange={(v) => updateField("adjectives", v)}
               />
@@ -388,21 +394,21 @@ if (step === 5) {
               <h2 className="text-3xl font-bold">Step 2: Skills</h2>
 
               <Input
-                label="Exceptional skills"
+                label="VisionYou is exceptionally good at..."
                 value={formData.exceptionalSkills}
                 onChange={(v) => updateField("exceptionalSkills", v)}
                 multiline
               />
 
               <Input
-                label="Future skills (2 years)"
+                label="New skills she has mastered in the next 2 years..."
                 value={formData.futureSkills}
                 onChange={(v) => updateField("futureSkills", v)}
                 multiline
               />
 
               <Input
-                label="Your daily superpower"
+                label="One superpower she uses daily..."
                 value={formData.superpower}
                 onChange={(v) => updateField("superpower", v)}
                 multiline
@@ -416,34 +422,34 @@ if (step === 5) {
               <h2 className="text-3xl font-bold">Step 3: Lifestyle</h2>
 
               <Input
-                label="Top priorities"
+                label="VisionYou lives a life where she prioritizes..."
                 value={formData.priorities}
                 onChange={(v) => updateField("priorities", v)}
                 multiline
               />
 
               <Input
-                label="Dream career day"
+                label="In my dream career, I spend most of my day doing..."
                 value={formData.dreamActivities}
                 onChange={(v) => updateField("dreamActivities", v)}
                 multiline
               />
 
               <Input
-                label="Impact you want to create"
+                label="The impact I want to create through my work is..."
                 value={formData.impact}
                 onChange={(v) => updateField("impact", v)}
                 multiline
               />
 
               <Input
-                label="Beneficiaries"
+                label="The people who benefit from my work are..."
                 value={formData.beneficiaries}
                 onChange={(v) => updateField("beneficiaries", v)}
               />
 
               <Input
-                label="Workday feeling"
+                label="A typical workday for VisionYou feels like..."
                 value={formData.workdayFeeling}
                 onChange={(v) => updateField("workdayFeeling", v)}
               />
@@ -456,9 +462,9 @@ if (step === 5) {
               <h2 className="text-3xl font-bold">
                 Step 4: Message to Your Future Self
               </h2>
-
+              <h2><strong>Complete this sentence and Retype it in the box.</strong></h2>
               <Input
-                label="Complete this sentence"
+                label="My future self is proud that I chose _________, because I followed my love for _________, built strong skills in _________, made an impact by _________, and turned it into a career in _________."
                 value={formData.futureMessage}
                 onChange={(v) => updateField("futureMessage", v)}
                 multiline
