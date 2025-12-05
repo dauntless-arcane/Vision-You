@@ -49,7 +49,7 @@ export default function LandingPage({ onModuleSelect }: LandingPageProps) {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             A career exploration experience that helps you discover your future self, your purpose,
-            and the right career direction. An initiative by OPT, CAPS Kengeri<br></br>
+            and the right career direction. An initiative by <strong>OPT, CAPS Kengeri</strong><br></br>
           </p>
         </div>
 
