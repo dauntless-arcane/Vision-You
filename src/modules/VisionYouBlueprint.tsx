@@ -167,7 +167,7 @@ export default function VisionYouBlueprint({
             </h1>
             
             <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
-              <strong>VisionYou = The future, upgraded version of you.</strong>
+              <strong>VisionYou The future, upgraded version of you.</strong>
               <br></br>
 The you who is more confident, skilled, balanced, successful, and aligned with your goals. VisionYou helps you create a direction. Instead of living day-to-day, you start living with purpose.
 It’s basically imagining who you want to become, how you want to live,what kind of work you want to do,what habits and mindset you want to adopt.
@@ -254,7 +254,7 @@ if (step === 5) {
           {/* ---------------------- EMPTY AI STATE ---------------------- */}
           {!loading && !aiResult && (
             <div className="mt-6 p-4 bg-gray-100 rounded-xl text-center text-gray-700">
-              No AI analysis yet. Click “Generate AI Analysis” to continue.
+              <strong>Please Click “Generate Analysis” to continue.</strong> 
             </div>
           )}
 
@@ -335,7 +335,7 @@ if (step === 5) {
             </Button>
 
             <Button size="lg" onClick={generateAI} disabled={loading}>
-              {loading ? "Generating..." : "Generate AI Analysis"}
+              {loading ? "Generating..." : "Generate Analysis"}
             </Button>
           </div>
         </Card>

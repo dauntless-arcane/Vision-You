@@ -206,8 +206,9 @@ export default function IkigaiMethod({ onBack }: IkigaiMethodProps) {
             </h1>
 
             <p className="text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto">
-              Find the intersection of passion, skills, societal impact, and
-              earning potential — your life’s purpose.
+              Ikigai is a Japanese concept that means “a reason for being.” It helps you find purpose by combining what you love, what you're good at, what the world needs, and what you can be paid for.
+This Ikigai diagram helps you explore your purpose by reflecting on four areas . By filling in each circle, you discover where all four overlap. This overlap is your potential career direction and personal purpose. Use this exercise to understand yourself better and make meaningful choices for your future.
+
             </p>
 
             <div className="flex gap-4 justify-center">
@@ -248,7 +249,7 @@ if (step === 5) {
           {/* No AI Result Yet */}
           {!data && !loading && (
             <div className="p-4 bg-gray-100 rounded-xl text-center text-gray-700 mb-6">
-              No AI results yet. Click below to generate your Ikigai analysis.
+              <strong>Please Click “Generate Analysis” to continue.</strong> 
             </div>
           )}
 
@@ -330,7 +331,7 @@ if (step === 5) {
               Back to Home
             </Button>
             <Button size="lg" onClick={generateIkigai} disabled={loading}>
-              {loading ? "Generating..." : "Generate AI Analysis"}
+              {loading ? "Generating..." : "Generate Analysis"}
             </Button>
           </div>
         </Card>

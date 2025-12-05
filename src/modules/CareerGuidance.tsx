@@ -160,7 +160,7 @@ export default function CareerGuidance({ onBack }: CareerGuidanceProps) {
               Career Guidance: Task-First Method
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Discover careers based on the tasks you naturally enjoy.
+              Task First, Title Next is a reverse-career exercise where you stop chasing job titles and start focusing on what you actually enjoy doing. You list the tasks that excite you (refer to the grid given in the next page), and only then discover the roles that match them. The title becomes a result, not the starting point.
             </p>
             <div className="flex gap-4 justify-center">
               <Button variant="ghost" onClick={onBack}>
@@ -243,7 +243,7 @@ return (
         {/* ---------------- AI RESULTS ONLY (removed static data) ---------------- */}
         {!aiResult?.careers && !loading && (
           <div className="p-4 bg-gray-100 rounded-xl text-center text-gray-600 mb-6">
-            No AI results yet. Click below to generate your personalized career analysis.
+            <strong>Please Click “Generate Analysis” to continue.</strong> 
           </div>
         )}
 
@@ -304,7 +304,7 @@ return (
             Back to Home
           </Button>
           <Button size="lg" onClick={generateAI} disabled={loading}>
-            {loading ? "Generating..." : "Generate AI Analysis"}
+            {loading ? "Generating..." : "Generate Analysis"}
           </Button>
         </div>
       </Card>

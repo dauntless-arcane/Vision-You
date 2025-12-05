@@ -12,14 +12,14 @@ export default function LandingPage({ onModuleSelect }: LandingPageProps) {
       id: 'blueprint' as const,
       icon: Target,
       title: 'VisionYou ',
-      description: 'Imagine your future, upgraded self and build your personalized VisionYou profile.',
+      description: 'VisionYou, The future, upgraded version of you.',
       gradient: 'from-blue-400 to-blue-600'
     },
     {
       id: 'ikigai' as const,
       icon: Compass,
       title: 'Ikigai Method',
-      description: 'Discover the intersection of passion, skills, purpose, and opportunities.',
+      description: 'Discover Your Ikigai - “a reason for being”',
       gradient: 'from-purple-400 to-purple-600'
     },
     {
@@ -47,7 +47,7 @@ export default function LandingPage({ onModuleSelect }: LandingPageProps) {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             A career exploration experience that helps you discover your future self, your purpose,
-            and the right career direction.
+            and the right career direction. An initiative by OPT, CAPS Kengeri<br></br>
           </p>
         </div>
 
@@ -81,7 +81,12 @@ export default function LandingPage({ onModuleSelect }: LandingPageProps) {
 
         <div className="mt-16 text-center">
           <p className="text-gray-500 text-sm">
-            Choose any module to begin your journey of self-discovery
+            Disclaimer: This tool uses AI to generate career suggestions. Please use it as a guide and consult with a career counselor for personalized advice.
+          </p>          
+        </div>
+        <div className="mt-6 text-center">
+        <p className="text-gray-500 text-sm">
+            @2025 Center for Academic and Professional Support (CAPS), CHRIST University. All rights reserved.
           </p>
         </div>
       </div>
