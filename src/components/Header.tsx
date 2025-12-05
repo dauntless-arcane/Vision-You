@@ -10,8 +10,15 @@ export default function Header({ onHomeClick }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl" />
-            <h1 className="text-xl font-bold text-gray-900">PathFinder </h1>
+            <div className=" rounded-xl" >
+              <img
+                src="/CAPS_logo.png"
+                alt="CAPS LOGO"
+                className="h-12 w-auto object-contain rounded-xl"
+              />
+
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900">PathFinder </h1>
           </div>
           <button
             onClick={onHomeClick}
