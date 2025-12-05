@@ -36,14 +36,16 @@ export default function LandingPage({ onModuleSelect }: LandingPageProps) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-6">
-            <img 
-              src="images\CAPS_logo.png"   // <--- replace with actual image path
+            <img
+              src="/CAPS_logo.png"
               alt="CAPS LOGO"
               className="w-80 h-20 object-cover rounded-3xl"
             />
           </div>
+
+
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Path Finder 
+            PathFinder 
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             A career exploration experience that helps you discover your future self, your purpose,

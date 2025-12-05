@@ -170,7 +170,7 @@ export default function VisionYouBlueprint({
               <strong>VisionYou The future, upgraded version of you.</strong>
               <br></br>
 The you who is more confident, skilled, balanced, successful, and aligned with your goals. VisionYou helps you create a direction. Instead of living day-to-day, you start living with purpose.
-It’s basically imagining who you want to become, how you want to live,what kind of work you want to do,what habits and mindset you want to adopt.
+It’s basically imagining who you want to become, how you want to live, what kind of work you want to do, what habits and mindset you want to adopt.
             <br></br><strong>Describe Future You across the following pillars:
             </strong>
             </p>

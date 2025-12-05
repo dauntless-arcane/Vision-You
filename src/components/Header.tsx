@@ -11,7 +11,7 @@ export default function Header({ onHomeClick }: HeaderProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl" />
-            <h1 className="text-xl font-bold text-gray-900">Path Finder </h1>
+            <h1 className="text-xl font-bold text-gray-900">PathFinder </h1>
           </div>
           <button
             onClick={onHomeClick}
